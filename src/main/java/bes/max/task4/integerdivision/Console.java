@@ -1,4 +1,4 @@
-package bes.max.task4_Integer_division;
+package bes.max.task4.integerdivision;
 
 public interface Console {
 
