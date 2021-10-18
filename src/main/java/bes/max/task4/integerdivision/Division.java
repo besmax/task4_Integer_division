@@ -14,6 +14,8 @@ public class Division {
     private List<Integer> multipliers = new ArrayList<>();
     private List<Integer> remainders = new ArrayList<>();
     private List<Integer> partsOfDividends = new ArrayList<>();
+    private List<Integer> intermediateResults = new ArrayList<>();
+
 
     public Division(int dividend, int divider) {
         super();
@@ -26,37 +28,40 @@ public class Division {
         absOfDivider = Math.abs(divider);
 
         if (checkIfDividerIsNotNull(absOfDivider) & checkIfDividendIsNotNull(absOfDividend)) {
-            while (dividend >= divider) {
-                dividend = divide();
+            while (absOfDividend >= absOfDivider) {
+                absOfDividend = divide();
             }
         }
     }
 
     public int divide() {
-        int lengthOfdDividend = countDigitsInInteger(dividend);
-        int lengthOfdDivider = countDigitsInInteger(divider);
-        int partOfDividend = trimNumber(dividend, (lengthOfdDividend - lengthOfdDivider));
+        int lengthOfdDividend = countDigitsInInteger(absOfDividend);
+        int lengthOfdDivider = countDigitsInInteger(absOfDivider);
+        int partOfDividend = trimNumber(absOfDividend, (lengthOfdDividend - lengthOfdDivider));
         int remainder;
 
-        if (partOfDividend >= divider) {
+        if (partOfDividend >= absOfDivider) {
             partsOfDividends.add(partOfDividend);
-            int multiplier = partOfDividend / divider;
+            int multiplier = partOfDividend / absOfDivider;
             multipliers.add(multiplier);
-            remainder = partOfDividend - (divider * multiplier);
+            remainder = partOfDividend - (absOfDivider * multiplier);
             remainders.add(remainder);
-            dividend = (int) (dividend - (multiplier * divider * Math.pow(10, (lengthOfdDividend - lengthOfdDivider))));
+            intermediateResults.add(absOfDivider * multiplier);
+            absOfDividend = (int) (absOfDividend - (multiplier * absOfDivider * Math.pow(10, (lengthOfdDividend - lengthOfdDivider))));
 
         } else {
-            partOfDividend = trimNumber(dividend, (lengthOfdDividend - lengthOfdDivider - 1));
+            partOfDividend = trimNumber(absOfDividend, (lengthOfdDividend - lengthOfdDivider - 1));
             partsOfDividends.add(partOfDividend);
-            int multiplier = partOfDividend / divider;
+            int multiplier = partOfDividend / absOfDivider;
             multipliers.add(multiplier);
-            remainder = partOfDividend - (divider * multiplier);
-            dividend = (int) (dividend
-                    - (multiplier * divider * Math.pow(10, (lengthOfdDividend - lengthOfdDivider + 1))));
+            remainder = partOfDividend - (absOfDivider * multiplier);
+            remainders.add(remainder);
+            intermediateResults.add(absOfDivider * multiplier);
+            absOfDividend = (int) (absOfDividend
+                    - (multiplier * absOfDivider * Math.pow(10, (lengthOfdDividend - lengthOfdDivider + 1))));
         }
 
-        return dividend;
+        return absOfDividend;
 
     }
 
@@ -104,9 +109,25 @@ public class Division {
     }
     
     public StringBuilder assembleResultAsAString() {
+        result.append(Math.abs(dividend));
+        result.append("|");
+        result.append(absOfDivider);
+        result.append(System.lineSeparator());
+        result.append(intermediateResults.get(0));
+        result.append(calculateSpaces(intermediateResults.get(0), dividend));
         
         return result;
         
+    }
+    
+    public StringBuilder calculateSpaces(int numberOne, int numberTwo) {
+        StringBuilder spaces = new StringBuilder();
+        int difference = Math.abs(countDigitsInInteger(numberOne) - countDigitsInInteger(numberTwo));
+        
+        for (int i = 0; i < difference; i++) {
+         spaces.append(" ");   
+        }
+        return spaces;
     }
 
     public List<Integer> getMultipliers() {
