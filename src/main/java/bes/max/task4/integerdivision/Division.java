@@ -30,6 +30,9 @@ public class Division {
             while (absOfDividend >= absOfDivider) {
                 absOfDividend = divide();
             }
+            if (absOfDividend > 0) {
+                remainders.add(absOfDividend);
+            }
         }
         return assembleResultAsAString();
     }
@@ -111,6 +114,7 @@ public class Division {
         result.append("|");
         result.append(absOfDivider);
         result.append(System.lineSeparator());
+        result.append(calculateSpaces(intermediateResults.get(0), partsOfDividends.get(0)));
         result.append(intermediateResults.get(0));
 
         result.append(calculateSpaces(intermediateResults.get(0), Math.abs(dividend)));
@@ -127,11 +131,12 @@ public class Division {
             result.append(System.lineSeparator());
 
             result.append(" ");
-            result.append(calculateSpaces(partsOfDividends.get(i), intermediateResults.get(i - 1)));
+            result.append(calculateSpaces(remainders.get(i), intermediateResults.get(i - 1)));
+            result.append(calculateSpaces(partsOfDividends.get(i), intermediateResults.get(i)));
             result.append(intermediateResults.get(i));
             result.append(System.lineSeparator());
         }
-        result.append(" ");
+        // result.append(" ");
         result.append(calculateSpaces(intermediateResults.get(intermediateResults.size() - 1),
                 remainders.get(remainders.size() - 1)));
         result.append(remainders.get(remainders.size() - 1));
