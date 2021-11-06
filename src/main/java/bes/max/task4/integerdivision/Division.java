@@ -37,28 +37,26 @@ public class Division {
     public int divide() {
         int lengthOfdDividend = countDigitsInInteger(absOfDividend);
         int lengthOfdDivider = countDigitsInInteger(absOfDivider);
-        int partOfDividend = trimNumber(absOfDividend, (lengthOfdDividend - lengthOfdDivider));
+        int digitsForTrim = (lengthOfdDividend - lengthOfdDivider);
+        int partOfDividend = trimNumber(absOfDividend, digitsForTrim);
         int remainder;
         int intermediateResult;
 
         if (partOfDividend < absOfDivider) {
-            partOfDividend = trimNumber(absOfDividend, (lengthOfdDividend - lengthOfdDivider - 1));
+
+            digitsForTrim = (lengthOfdDividend - lengthOfdDivider - 1);
+            partOfDividend = trimNumber(absOfDividend, digitsForTrim);
         }
 
         partsOfDividends.add(partOfDividend);
         int multiplier = partOfDividend / absOfDivider;
-        multipliers.add(multiplier);
-        remainder = partOfDividend - (absOfDivider * multiplier);
-        remainders.add(remainder);
-        if (remainder == 0) {
-            multipliers.add(0);
-        }
         intermediateResult = absOfDivider * multiplier;
+        remainder = partOfDividend - intermediateResult;
+        remainders.add(remainder);
         intermediateResults.add(intermediateResult);
-        absOfDividend = (int) (absOfDividend
-                - (multiplier * absOfDivider * Math.pow(10, (lengthOfdDividend - lengthOfdDivider))));
-        
-        
+        multipliers.add(multiplier);
+        addNullToResult(absOfDividend, digitsForTrim, partOfDividend, multiplier);
+        absOfDividend = (int) (absOfDividend - (intermediateResult * Math.pow(10, digitsForTrim)));
 
         return absOfDividend;
 
@@ -151,13 +149,34 @@ public class Division {
         }
         return spaces;
     }
-    
-    public void addNullToResult(int ret) {
-        
+
+    public void addNullToResult(int absOfDividend, int digitsForTrimming, int partOfDividend, int multiplier) {
+        int remainderOfCurrentPartOfDividendPlusNextFigure = absOfDivider;
+        if (digitsForTrimming > 0) {
+            remainderOfCurrentPartOfDividendPlusNextFigure = Integer
+                    .parseInt(Integer.toString(partOfDividend - (absOfDivider * multiplier)) + String
+                            .valueOf((Integer.toString(absOfDividend)).charAt(countDigitsInInteger(absOfDivider))));
+        }
+        if (remainderOfCurrentPartOfDividendPlusNextFigure < absOfDivider) {
+            multipliers.add(0);
+        }
+
     }
 
     public List<Integer> getMultipliers() {
         return multipliers;
+    }
+
+    public List<Integer> getRemainders() {
+        return remainders;
+    }
+
+    public List<Integer> getPartsOfDividends() {
+        return partsOfDividends;
+    }
+
+    public List<Integer> getIntermediateResults() {
+        return intermediateResults;
     }
 
 }
