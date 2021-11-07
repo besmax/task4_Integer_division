@@ -14,7 +14,8 @@ public class Main {
         console.print(division.run().toString());
         
         console.print(division.getRemainders().toString());
-
+        console.print(division.getIntermediateResults().toString());
+        console.print(division.getPartsOfDividends().toString());
     }
 
 }

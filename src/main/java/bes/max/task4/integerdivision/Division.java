@@ -30,7 +30,7 @@ public class Division {
             while (absOfDividend >= absOfDivider) {
                 absOfDividend = divide();
             }
-            if (absOfDividend > 0) {
+            if (absOfDividend > 0 && remainders.get(remainders.size() - 1) != absOfDividend) {
                 remainders.add(absOfDividend);
             }
         }
@@ -114,9 +114,9 @@ public class Division {
         result.append("|");
         result.append(absOfDivider);
         result.append(System.lineSeparator());
+        
         result.append(calculateSpaces(intermediateResults.get(0), partsOfDividends.get(0)));
         result.append(intermediateResults.get(0));
-
         result.append(calculateSpaces(intermediateResults.get(0), Math.abs(dividend)));
         result.append("|");
         for (int eachMultiplier : multipliers) {
@@ -125,19 +125,21 @@ public class Division {
         result.append(System.lineSeparator());
 
         for (int i = 1; i < partsOfDividends.size(); i++) {
-            result.append(" ");
-            result.append(calculateSpaces(remainders.get(i), intermediateResults.get(i - 1)));
+            if (countDigitsInInteger(partsOfDividends.get(i - 1)) > countDigitsInInteger(remainders.get(i - 1))){
+                result.append(calculateSpaces(remainders.get(i - 1), partsOfDividends.get(i - 1)));
+            }
+            
             result.append(partsOfDividends.get(i));
             result.append(System.lineSeparator());
-
-            result.append(" ");
-            result.append(calculateSpaces(remainders.get(i), intermediateResults.get(i - 1)));
-            result.append(calculateSpaces(partsOfDividends.get(i), intermediateResults.get(i)));
+            
+            if (countDigitsInInteger(partsOfDividends.get(i - 1)) > countDigitsInInteger(intermediateResults.get(i - 1))){
+                result.append(calculateSpaces(partsOfDividends.get(i - 1), intermediateResults.get(i - 1)));
+            }
+            
             result.append(intermediateResults.get(i));
             result.append(System.lineSeparator());
         }
-        // result.append(" ");
-        result.append(calculateSpaces(intermediateResults.get(intermediateResults.size() - 1),
+        result.append(calculateSpaces(Math.abs(dividend),
                 remainders.get(remainders.size() - 1)));
         result.append(remainders.get(remainders.size() - 1));
 
